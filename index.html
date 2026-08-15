@@ -15,10 +15,12 @@
   a,button,.work{cursor:none;}
   .wrap{max-width:960px;margin:0 auto;padding:0 40px;position:relative;z-index:2;}
   .bg-art{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;}
-  .ink-line{position:fixed;top:0;left:50%;transform:translateX(-50%);height:100vh;width:100%;max-width:1040px;z-index:1;pointer-events:none;}
-  .ink-line svg{width:100%;height:100%;}
-  .ink-path{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;}
-  .cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
+  .rail{position:fixed;left:38px;top:18vh;bottom:18vh;width:1px;background:var(--line);z-index:5;pointer-events:none;}
+  .rail .fill{position:absolute;top:0;left:0;width:1px;height:0;background:var(--ink);transition:height .15s linear;}
+  .rail .node{position:absolute;left:-3px;width:7px;height:7px;border-radius:50%;background:var(--paper);border:1px solid var(--grey);transition:all .4s;}
+  .rail .node.on{background:var(--red);border-color:var(--red);transform:scale(1.25);}
+  @media(max-width:900px){.rail{display:none;}}
+  .cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:normal;}
   .cursor.big{width:44px;height:44px;background:rgba(192,57,43,.15);}
   nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:24px 40px;background:rgba(250,249,246,.82);backdrop-filter:blur(8px);border-bottom:1px solid transparent;transition:border-color .4s;}
   nav.scrolled{border-color:var(--line);}
@@ -49,8 +51,8 @@
   .cell{background:var(--paper);padding:44px 38px;transition:background .35s;position:relative;}
   .cell:hover{background:#fff;}
   .cell .ic{margin-bottom:18px;}
-  .cell .ic path,.cell .ic line,.cell .ic rect{stroke-dasharray:200;stroke-dashoffset:0;}
-  .cell:hover .ic path,.cell:hover .ic line,.cell:hover .ic rect{animation:redraw .9s ease forwards;}
+  .cell .ic path,.cell .ic line,.cell .ic rect{stroke-dasharray:200;stroke-dashoffset:0;transition:stroke-dashoffset .8s ease;}
+  .cell:hover .ic path,.cell:hover .ic line,.cell:hover .ic rect{stroke-dashoffset:200;animation:redraw .9s ease forwards;}
   @keyframes redraw{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
   .cell .en{font-family:sans-serif;font-size:11px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;}
   .cell h3{font-size:21px;font-weight:400;letter-spacing:3px;margin:4px 0 12px;}
@@ -85,10 +87,12 @@
   <circle cx="300" cy="500" r="3.5" fill="#2e7d5b" opacity="0.45"/>
 </svg>
 </div>
-<div class="ink-line">
-<svg viewBox="0 0 1040 3000" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg">
-  <path id="inkPath" class="ink-path" d="M520 40 C 520 260, 300 360, 300 560 S 740 760, 740 1000 S 300 1240, 300 1500 S 740 1760, 740 2040 S 400 2300, 520 2600"/>
-</svg>
+<div class="rail" id="rail">
+  <div class="fill" id="railFill"></div>
+  <div class="node" style="top:0%"></div>
+  <div class="node" style="top:33%"></div>
+  <div class="node" style="top:66%"></div>
+  <div class="node" style="top:100%"></div>
 </div>
 <div class="cursor" id="cursor"></div>
 <nav id="nav">
@@ -201,13 +205,15 @@
   addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>40)});
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.15});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-  const path=document.getElementById('inkPath');
-  if(path){
-    const len=path.getTotalLength();
-    path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
-    const draw=()=>{const max=document.body.scrollHeight-innerHeight;const p=max>0?Math.min(scrollY/max,1):0;path.style.strokeDashoffset=len*(1-p);};
-    addEventListener('scroll',draw);draw();
-  }
+  const railFill=document.getElementById('railFill');
+  const nodes=document.querySelectorAll('.rail .node');
+  const draw=()=>{
+    const max=document.body.scrollHeight-innerHeight;
+    const p=max>0?Math.min(scrollY/max,1):0;
+    railFill.style.height=(p*100)+'%';
+    nodes.forEach((n,i)=>{const th=[0,.33,.66,1][i];n.classList.toggle('on',p>=th-0.02);});
+  };
+  addEventListener('scroll',draw);draw();
   const cur=document.getElementById('cursor');
   let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
   addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
