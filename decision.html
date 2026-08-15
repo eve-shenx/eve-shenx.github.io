@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>决策矩阵 · eve</title>
+<style>
+  :root{--paper:#faf9f6;--ink:#1a1a1a;--grey:#8a8a86;--line:#d8d6cf;--red:#c0392b;--soft:#f0eee8;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:"Songti SC","Georgia",serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+  a{color:inherit;}
+  header.top{padding:40px 0 24px;border-bottom:1px solid var(--line);}
+  .back{font-family:sans-serif;font-size:13px;letter-spacing:1px;color:var(--grey);text-decoration:none;transition:color .3s;}
+  .back:hover{color:var(--ink);}
+  h1{font-size:38px;font-weight:400;letter-spacing:3px;margin-top:22px;display:flex;align-items:center;gap:12px;}
+  h1 .dot{width:9px;height:9px;background:var(--red);border-radius:50%;}
+  .subtitle{font-family:sans-serif;font-size:14px;color:var(--grey);letter-spacing:1px;margin-top:10px;}
+  section{padding:34px 0;border-bottom:1px solid var(--line);}
+  .lab{font-family:sans-serif;font-size:12px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:16px;}
+  .hint{font-family:sans-serif;font-size:13px;color:var(--grey);margin-bottom:16px;}
+  input[type=text]{font-family:"Songti SC",serif;font-size:16px;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--line);padding:8px 4px;outline:none;transition:border-color .3s;width:100%;}
+  input[type=text]:focus{border-color:var(--ink);}
+  input.title-in{font-size:22px;}
+  .row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .row input[type=text]{flex:1;}
+  .wt{width:88px;flex:none;}
+  .wt label{font-family:sans-serif;font-size:11px;color:var(--grey);display:block;letter-spacing:1px;}
+  .wt input{width:100%;font-family:sans-serif;font-size:15px;text-align:center;border:1px solid var(--line);border-radius:2px;padding:6px;outline:none;background:#fff;}
+  .del{font-family:sans-serif;font-size:20px;color:var(--grey);background:none;border:none;cursor:pointer;line-height:1;padding:4px 6px;transition:color .3s;flex:none;}
+  .del:hover{color:var(--red);}
+  .btn{font-family:sans-serif;font-size:13px;letter-spacing:1px;background:none;border:1px solid var(--line);color:var(--ink);padding:9px 18px;cursor:pointer;transition:all .3s;border-radius:2px;margin-right:10px;}
+  .btn:hover{border-color:var(--ink);background:#fff;}
+  .table-scroll{overflow-x:auto;margin-top:10px;}
+  table{border-collapse:collapse;width:100%;min-width:520px;}
+  th,td{padding:12px 10px;text-align:center;border-bottom:1px solid var(--line);font-size:15px;}
+  th{font-family:sans-serif;font-size:12px;letter-spacing:1px;color:var(--grey);font-weight:400;}
+  th.opt-h,td.opt-c{text-align:left;font-family:"Songti SC",serif;}
+  td.opt-c{font-size:16px;}
+  .score-in{width:52px;text-align:center;font-family:sans-serif;font-size:15px;border:1px solid var(--line);border-radius:2px;padding:6px 2px;outline:none;background:#fff;}
+  .score-in:focus{border-color:var(--ink);}
+  td.total{font-family:sans-serif;font-weight:700;font-size:17px;}
+  .result{padding:34px 0 60px;}
+  .rank{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid var(--line);margin-bottom:12px;border-radius:3px;transition:all .4s;background:#fff;}
+  .rank.win{border-color:var(--red);box-shadow:0 4px 20px rgba(192,57,43,.08);}
+  .rank .no{font-family:"Georgia",serif;font-size:26px;color:var(--grey);width:34px;flex:none;}
+  .rank.win .no{color:var(--red);}
+  .rank .nm{font-size:19px;flex:1;letter-spacing:1px;}
+  .rank .bar-wrap{flex:2;height:4px;background:var(--soft);border-radius:2px;overflow:hidden;}
+  .rank .bar{height:100%;background:var(--ink);width:0;transition:width .8s ease;}
+  .rank.win .bar{background:var(--red);}
+  .rank .sc{font-family:sans-serif;font-weight:700;font-size:16px;width:56px;text-align:right;flex:none;}
+  .win-tag{font-family:sans-serif;font-size:11px;letter-spacing:2px;color:var(--red);border:1px solid var(--red);padding:2px 8px;border-radius:2px;}
+  .empty{font-family:sans-serif;color:var(--grey);font-size:14px;padding:20px 0;}
+  @media(max-width:640px){.rank .bar-wrap{display:none;}h1{font-size:30px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="index.html">← 回到 eve</a>
+    <h1><span class="dot"></span>决策矩阵</h1>
+    <div class="subtitle">Decision Matrix — 把"凭感觉纠结"变成"看数据决定"</div>
+  </header>
+  <section>
+    <div class="lab">Step 1 · 我在纠结什么</div>
+    <input type="text" class="title-in" id="topic" placeholder="例如：毕业后先读研还是先工作？">
+  </section>
+  <section>
+    <div class="lab">Step 2 · 我的选项</div>
+    <div class="hint">列出你在纠结的几个选择。</div>
+    <div id="options"></div>
+    <button class="btn" onclick="addOption()">+ 添加选项</button>
+  </section>
+  <section>
+    <div class="lab">Step 3 · 我在意的维度 & 权重</div>
+    <div class="hint">你做这个决定时看重什么？权重越大越重要（建议用 1–5）。</div>
+    <div id="criteria"></div>
+    <button class="btn" onclick="addCriterion()">+ 添加维度</button>
+  </section>
+  <section>
+    <div class="lab">Step 4 · 逐项打分</div>
+    <div class="hint">给每个选项在各维度上打分（0–10）。分数越高越好。</div>
+    <div class="table-scroll"><table id="matrix"></table></div>
+  </section>
+  <div class="result">
+    <div class="lab">结果 · 加权排名</div>
+    <div id="ranking"></div>
+    <div style="margin-top:24px;">
+      <button class="btn" onclick="resetAll()">重置全部</button>
+    </div>
+  </div>
+</div>
+<script>
+let state={topic:"",options:[],criteria:[],scores:{}};
+function uid(){return Math.random().toString(36).slice(2,8);}
+function save(){localStorage.setItem('eve_matrix',JSON.stringify(state));}
+function load(){
+  const s=localStorage.getItem('eve_matrix');
+  if(s){try{state=JSON.parse(s);}catch(e){}}
+  if(!state.options.length){state.options=[{id:uid(),name:""},{id:uid(),name:""}];}
+  if(!state.criteria.length){state.criteria=[{id:uid(),name:"",weight:3}];}
+}
+function addOption(){state.options.push({id:uid(),name:""});renderAll();save();}
+function addCriterion(){state.criteria.push({id:uid(),name:"",weight:3});renderAll();save();}
+function delOption(id){state.options=state.options.filter(o=>o.id!==id);renderAll();save();}
+function delCriterion(id){state.criteria=state.criteria.filter(c=>c.id!==id);renderAll();save();}
+function renderOptions(){
+  const box=document.getElementById('options');box.innerHTML='';
+  state.options.forEach(o=>{
+    const r=document.createElement('div');r.className='row';
+    r.innerHTML=`<input type="text" value="${esc(o.name)}" placeholder="选项名称" oninput="upOpt('${o.id}',this.value)">
+    <button class="del" onclick="delOption('${o.id}')" title="删除">×</button>`;
+    box.appendChild(r);
+  });
+}
+function renderCriteria(){
+  const box=document.getElementById('criteria');box.innerHTML='';
+  state.criteria.forEach(c=>{
+    const r=document.createElement('div');r.className='row';
+    r.innerHTML=`<input type="text" value="${esc(c.name)}" placeholder="维度名称，如 收入 / 成长 / 兴趣" oninput="upCri('${c.id}',this.value)">
+    <div class="wt"><label>权重</label><input type="number" min="1" max="5" step="1" value="${c.weight}" oninput="upWt('${c.id}',this.value)"></div>
+    <button class="del" onclick="delCriterion('${c.id}')" title="删除">×</button>`;
+    box.appendChild(r);
+  });
+}
+function renderMatrix(){
+  const t=document.getElementById('matrix');t.innerHTML='';
+  if(!state.options.length||!state.criteria.length){t.innerHTML='<tr><td class="empty">先添加选项和维度～</td></tr>';return;}
+  let head='<tr><th class="opt-h">选项 \\ 维度</th>';
+  state.criteria.forEach(c=>head+=`<th>${esc(c.name||'未命名')}<br><span style="color:var(--red)">×${c.weight}</span></th>`);
+  head+='<th>加权总分</th></tr>';
+  let body='';
+  state.options.forEach(o=>{
+    body+=`<tr><td class="opt-c">${esc(o.name||'未命名')}</td>`;
+    state.criteria.forEach(c=>{
+      const v=(state.scores[o.id]&&state.scores[o.id][c.id]!=null)?state.scores[o.id][c.id]:'';
+      body+=`<td><input class="score-in" type="number" min="0" max="10" value="${v}" oninput="upScore('${o.id}','${c.id}',this.value)"></td>`;
+    });
+    body+=`<td class="total">${calcTotal(o.id).toFixed(0)}</td></tr>`;
+  });
+  t.innerHTML=head+body;
+}
+function renderRanking(){
+  const box=document.getElementById('ranking');
+  const named=state.options.filter(o=>o.name.trim());
+  if(named.length<2||!state.criteria.some(c=>c.name.trim())){box.innerHTML='<div class="empty">填好选项、维度和分数后，这里会自动算出排名。</div>';return;}
+  const arr=state.options.map(o=>({name:o.name||'未命名',total:calcTotal(o.id)})).sort((a,b)=>b.total-a.total);
+  const max=arr[0].total||1;
+  box.innerHTML='';
+  arr.forEach((it,i)=>{
+    const win=i===0&&it.total>0;
+    const d=document.createElement('div');d.className='rank'+(win?' win':'');
+    d.innerHTML=`<div class="no">${i+1}</div><div class="nm">${esc(it.name)}</div>
+      <div class="bar-wrap"><div class="bar" style="width:${max?(it.total/max*100):0}%"></div></div>
+      <div class="sc">${it.total.toFixed(0)}</div>${win?'<span class="win-tag">最优</span>':''}`;
+    box.appendChild(d);
+  });
+}
+function calcTotal(oid){
+  let s=0;state.criteria.forEach(c=>{
+    const v=state.scores[oid]&&state.scores[oid][c.id]!=null?+state.scores[oid][c.id]:0;
+    s+=v*(+c.weight||0);
+  });return s;
+}
+function upOpt(id,v){find(state.options,id).name=v;renderMatrix();renderRanking();save();}
+function upCri(id,v){find(state.criteria,id).name=v;renderMatrix();renderRanking();save();}
+function upWt(id,v){find(state.criteria,id).weight=Math.max(1,Math.min(5,+v||1));renderMatrix();renderRanking();save();}
+function upScore(oid,cid,v){
+  if(!state.scores[oid])state.scores[oid]={};
+  state.scores[oid][cid]=v===''?null:Math.max(0,Math.min(10,+v));
+  document.querySelectorAll('#matrix .total').forEach((el,i)=>{if(state.options[i])el.textContent=calcTotal(state.options[i].id).toFixed(0);});
+  renderRanking();save();
+}
+function find(a,id){return a.find(x=>x.id===id);}
+function esc(s){return(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function renderAll(){renderOptions();renderCriteria();renderMatrix();renderRanking();}
+function resetAll(){if(confirm('确定清空所有内容？')){localStorage.removeItem('eve_matrix');state={topic:"",options:[],criteria:[],scores:{}};load();document.getElementById('topic').value='';renderAll();}}
+document.getElementById('topic').addEventListener('input',e=>{state.topic=e.target.value;save();});
+load();
+document.getElementById('topic').value=state.topic||'';
+renderAll();
+</script>
+</body>
+</html>
