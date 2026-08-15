@@ -1,48 +1,201 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eve</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #faf9f6;
-      font-family: "Georgia", "Songti SC", serif;
-      color: #1a1a1a;
-    }
-    .dot {
-      width: 10px; height: 10px;
-      background: #c0392b;
-      border-radius: 50%;
-      margin-bottom: 40px;
-    }
-    h1 {
-      font-size: 64px;
-      font-weight: 400;
-      letter-spacing: 8px;
-    }
-    .line {
-      width: 60px; height: 1px;
-      background: #1a1a1a;
-      margin: 24px 0;
-    }
-    p {
-      font-size: 14px;
-      letter-spacing: 4px;
-      color: #888;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eve</title>
+<style>
+  :root{
+    --paper:#faf9f6;
+    --ink:#1a1a1a;
+    --grey:#8a8a86;
+    --line:#d8d6cf;
+    --red:#c0392b;
+    --yellow:#e0a92e;
+    --green:#2e7d5b;
+    --blue:#2c5f8a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Songti SC","Georgia",serif;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 32px;}
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:10;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:24px 40px;
+    background:rgba(250,249,246,.82);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid transparent;
+    transition:border-color .4s;
+  }
+  nav.scrolled{border-color:var(--line);}
+  nav .logo{font-size:20px;letter-spacing:4px;font-weight:400;}
+  nav .logo b{color:var(--red);font-weight:400;}
+  nav .links a{
+    margin-left:28px;color:var(--grey);text-decoration:none;
+    font-family:sans-serif;font-size:13px;letter-spacing:1px;
+    transition:color .3s;
+  }
+  nav .links a:hover{color:var(--ink);}
+  @media(max-width:640px){nav .links a{margin-left:16px;font-size:11px;}nav{padding:18px 20px;}}
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;position:relative;
+  }
+  .hero .dot{width:9px;height:9px;background:var(--red);border-radius:50%;margin-bottom:38px;
+    animation:float 4s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .hero h1{font-size:clamp(64px,14vw,140px);font-weight:400;letter-spacing:.08em;line-height:1;}
+  .hero .stroke{width:64px;height:1px;background:var(--ink);margin:28px auto;}
+  .hero .sub{font-family:sans-serif;font-size:13px;letter-spacing:5px;color:var(--grey);text-transform:uppercase;}
+  .hero .scroll-hint{position:absolute;bottom:36px;font-family:sans-serif;font-size:11px;letter-spacing:3px;color:var(--grey);}
+  .hero .scroll-hint::after{content:"";display:block;width:1px;height:34px;background:var(--line);margin:12px auto 0;}
+  section.block{padding:110px 0;border-top:1px solid var(--line);}
+  .kicker{font-family:sans-serif;font-size:12px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:18px;}
+  .block h2{font-size:34px;font-weight:400;letter-spacing:2px;margin-bottom:28px;}
+  .block p.lead{font-size:18px;color:#3a3a38;max-width:620px;}
+  .quote{
+    font-size:26px;line-height:1.9;letter-spacing:2px;color:var(--ink);
+    max-width:640px;margin-top:10px;position:relative;padding-left:26px;
+  }
+  .quote::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--red);}
+  .quote small{display:block;font-size:14px;color:var(--grey);letter-spacing:2px;margin-top:16px;font-family:sans-serif;}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:12px;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  .cell{background:var(--paper);padding:40px 36px;transition:background .35s;}
+  .cell:hover{background:#fff;}
+  .cell .ic{margin-bottom:18px;}
+  .cell h3{font-size:20px;font-weight:400;letter-spacing:2px;margin-bottom:8px;}
+  .cell span{font-family:sans-serif;font-size:13px;color:var(--grey);letter-spacing:1px;}
+  .works{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:12px;}
+  @media(max-width:640px){.works{grid-template-columns:1fr;}}
+  .work{
+    border:1px solid var(--line);padding:36px 32px;text-decoration:none;color:var(--ink);
+    display:block;transition:transform .35s,border-color .35s;position:relative;overflow:hidden;
+  }
+  .work:hover{transform:translateY(-4px);border-color:var(--ink);}
+  .work .tag{font-family:sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey);}
+  .work h3{font-size:23px;font-weight:400;letter-spacing:1px;margin:14px 0 10px;}
+  .work p{font-family:sans-serif;font-size:14px;color:#57574f;line-height:1.7;}
+  .work .status{display:inline-block;margin-top:20px;font-family:sans-serif;font-size:12px;letter-spacing:2px;color:var(--red);}
+  .work .corner{position:absolute;top:18px;right:20px;width:7px;height:7px;border-radius:50%;}
+  footer{border-top:1px solid var(--line);padding:60px 0 80px;text-align:center;}
+  footer .dot{width:7px;height:7px;background:var(--red);border-radius:50%;margin:0 auto 24px;}
+  footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-family:sans-serif;font-size:14px;letter-spacing:1px;padding-bottom:2px;transition:border-color .3s;}
+  footer a:hover{border-color:var(--ink);}
+  footer p{font-family:sans-serif;font-size:12px;color:var(--grey);letter-spacing:2px;margin-top:24px;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s;}
+  .reveal.show{opacity:1;transform:none;}
+</style>
 </head>
 <body>
+<nav id="nav">
+  <div class="logo">e<b>·</b>v e</div>
+  <div class="links">
+    <a href="#about">关于</a>
+    <a href="#interests">爱好</a>
+    <a href="#works">作品</a>
+    <a href="#contact">联系</a>
+  </div>
+</nav>
+<header class="hero">
   <div class="dot"></div>
   <h1>eve</h1>
-  <div class="line"></div>
-  <p>COMING SOON</p>
+  <div class="stroke"></div>
+  <div class="sub">think · create · renew</div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+<section class="block" id="about">
+  <div class="wrap reveal">
+    <div class="kicker">About</div>
+    <h2>关于 eve</h2>
+    <p class="lead">27 届在读，大三。一个相信「审美是判断力、思考是竞争力」的人。习惯把好奇心变成作品，把批判变成更好的答案。</p>
+    <blockquote class="quote">
+      苟日新，日日新，又日新。
+      <small>—— 保持批判，保持创新，保持每天都比昨天更清醒一点。</small>
+    </blockquote>
+  </div>
+</section>
+<section class="block" id="interests">
+  <div class="wrap reveal">
+    <div class="kicker">Interests</div>
+    <h2>让我成为我的四件事</h2>
+    <div class="grid">
+      <div class="cell">
+        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M6 30 C14 10, 26 10, 34 30" stroke-linecap="round"/>
+          <circle cx="31" cy="14" r="2.4" fill="#c0392b" stroke="none"/>
+        </svg>
+        <h3>画画</h3>
+        <span>Painting — 尤爱吴冠中，痴迷线条与留白</span>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <circle cx="14" cy="14" r="7"/><line x1="19" y1="19" x2="32" y2="32" stroke-linecap="round"/>
+          <circle cx="14" cy="14" r="2" fill="#e0a92e" stroke="none"/>
+        </svg>
+        <h3>羽毛球</h3>
+        <span>Badminton — 场上讲节奏，场下也讲节奏</span>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M8 10 H32 V30 H8 Z"/><line x1="20" y1="10" x2="20" y2="30"/>
+          <circle cx="14" cy="20" r="1.8" fill="#2e7d5b" stroke="none"/>
+        </svg>
+        <h3>看书</h3>
+        <span>Reading — 在别人的思想里，长出自己的</span>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <rect x="7" y="12" width="26" height="16"/><path d="M7 12 L20 20 L33 12"/>
+          <circle cx="20" cy="20" r="1.8" fill="#2c5f8a" stroke="none"/>
+        </svg>
+        <h3>看电影</h3>
+        <span>Film — 每一帧都是别人替我活过的人生</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="block" id="works">
+  <div class="wrap reveal">
+    <div class="kicker">Works</div>
+    <h2>作品 · Vibe Coding</h2>
+    <p class="lead">不止会想，还能把想法变成能用的东西。以下两件，是我对「思考」这件事的产品化尝试。</p>
+    <div class="works">
+      <a class="work" href="#">
+        <span class="corner" style="background:var(--red)"></span>
+        <div class="tag">TOOL / 01</div>
+        <h3>决策矩阵</h3>
+        <p>纠结时，用结构化的方式替你把选项、权重、得分一并看清——让选择有据可依。</p>
+        <span class="status">即将上线 →</span>
+      </a>
+      <a class="work" href="#">
+        <span class="corner" style="background:var(--blue)"></span>
+        <div class="tag">TOOL / 02</div>
+        <h3>论点拆解器</h3>
+        <p>输入一个观点，帮你拆出论据、隐藏假设、逻辑漏洞与反方视角，并一键生成 AI 深度分析提示词。</p>
+        <span class="status">即将上线 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+<footer id="contact">
+  <div class="dot"></div>
+  <a href="https://github.com/eve-shenx" target="_blank">github.com/eve-shenx</a>
+  <p>© 2026 EVE · MADE WITH CURIOSITY</p>
+</footer>
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>40)});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
