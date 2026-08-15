@@ -6,96 +6,91 @@
 <title>eve</title>
 <style>
   :root{
-    --paper:#faf9f6;
-    --ink:#1a1a1a;
-    --grey:#8a8a86;
-    --line:#d8d6cf;
-    --red:#c0392b;
-    --yellow:#e0a92e;
-    --green:#2e7d5b;
-    --blue:#2c5f8a;
+    --paper:#faf9f6;--ink:#1a1a1a;--grey:#8a8a86;--line:#d8d6cf;
+    --red:#c0392b;--yellow:#e0a92e;--green:#2e7d5b;--blue:#2c5f8a;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:"Songti SC","Georgia",serif;
-    line-height:1.8;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  .wrap{max-width:960px;margin:0 auto;padding:0 32px;}
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:10;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:24px 40px;
-    background:rgba(250,249,246,.82);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid transparent;
-    transition:border-color .4s;
-  }
+  body{background:var(--paper);color:var(--ink);font-family:"Songti SC","Georgia",serif;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;}
+  a,button,.work{cursor:none;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 40px;position:relative;z-index:2;}
+  .bg-art{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;}
+  .ink-line{position:fixed;top:0;left:50%;transform:translateX(-50%);height:100vh;width:100%;max-width:1040px;z-index:1;pointer-events:none;}
+  .ink-line svg{width:100%;height:100%;}
+  .ink-path{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;}
+  .cursor{position:fixed;top:0;left:0;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
+  .cursor.big{width:44px;height:44px;background:rgba(192,57,43,.15);}
+  nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:24px 40px;background:rgba(250,249,246,.82);backdrop-filter:blur(8px);border-bottom:1px solid transparent;transition:border-color .4s;}
   nav.scrolled{border-color:var(--line);}
-  nav .logo{font-size:20px;letter-spacing:4px;font-weight:400;}
-  nav .logo b{color:var(--red);font-weight:400;}
-  nav .links a{
-    margin-left:28px;color:var(--grey);text-decoration:none;
-    font-family:sans-serif;font-size:13px;letter-spacing:1px;
-    transition:color .3s;
-  }
+  nav .logo{font-size:20px;letter-spacing:4px;}
+  nav .logo b{color:var(--red);}
+  nav .links a{margin-left:28px;color:var(--grey);text-decoration:none;font-family:sans-serif;font-size:13px;letter-spacing:1px;transition:color .3s;}
   nav .links a:hover{color:var(--ink);}
   @media(max-width:640px){nav .links a{margin-left:16px;font-size:11px;}nav{padding:18px 20px;}}
-  .hero{
-    min-height:100vh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;position:relative;
-  }
-  .hero .dot{width:9px;height:9px;background:var(--red);border-radius:50%;margin-bottom:38px;
-    animation:float 4s ease-in-out infinite;}
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;}
+  .hero .dot{width:9px;height:9px;background:var(--red);border-radius:50%;margin-bottom:38px;animation:float 4s ease-in-out infinite;}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   .hero h1{font-size:clamp(64px,14vw,140px);font-weight:400;letter-spacing:.08em;line-height:1;}
   .hero .stroke{width:64px;height:1px;background:var(--ink);margin:28px auto;}
   .hero .sub{font-family:sans-serif;font-size:13px;letter-spacing:5px;color:var(--grey);text-transform:uppercase;}
   .hero .scroll-hint{position:absolute;bottom:36px;font-family:sans-serif;font-size:11px;letter-spacing:3px;color:var(--grey);}
   .hero .scroll-hint::after{content:"";display:block;width:1px;height:34px;background:var(--line);margin:12px auto 0;}
-  section.block{padding:110px 0;border-top:1px solid var(--line);}
+  section.block{padding:120px 0;border-top:1px solid var(--line);position:relative;z-index:2;}
+  .num{font-family:"Georgia",serif;font-size:120px;color:rgba(26,26,26,.05);position:absolute;top:60px;right:40px;line-height:1;z-index:0;}
+  .vtag{position:absolute;left:-2px;top:120px;writing-mode:vertical-rl;font-family:sans-serif;font-size:11px;letter-spacing:4px;color:var(--grey);text-transform:uppercase;}
   .kicker{font-family:sans-serif;font-size:12px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:18px;}
-  .block h2{font-size:34px;font-weight:400;letter-spacing:2px;margin-bottom:28px;}
+  .block h2{font-size:34px;font-weight:400;letter-spacing:2px;margin-bottom:28px;position:relative;z-index:2;}
   .block p.lead{font-size:18px;color:#3a3a38;max-width:620px;}
-  .quote{
-    font-size:26px;line-height:1.9;letter-spacing:2px;color:var(--ink);
-    max-width:640px;margin-top:10px;position:relative;padding-left:26px;
-  }
+  .quote{font-size:26px;line-height:1.9;letter-spacing:2px;max-width:640px;margin-top:10px;position:relative;padding-left:26px;}
   .quote::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--red);}
   .quote small{display:block;font-size:14px;color:var(--grey);letter-spacing:2px;margin-top:16px;font-family:sans-serif;}
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:12px;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
-  .cell{background:var(--paper);padding:40px 36px;transition:background .35s;}
+  .cell{background:var(--paper);padding:44px 38px;transition:background .35s;position:relative;}
   .cell:hover{background:#fff;}
   .cell .ic{margin-bottom:18px;}
-  .cell h3{font-size:20px;font-weight:400;letter-spacing:2px;margin-bottom:8px;}
-  .cell span{font-family:sans-serif;font-size:13px;color:var(--grey);letter-spacing:1px;}
+  .cell .ic path,.cell .ic line,.cell .ic rect{stroke-dasharray:200;stroke-dashoffset:0;}
+  .cell:hover .ic path,.cell:hover .ic line,.cell:hover .ic rect{animation:redraw .9s ease forwards;}
+  @keyframes redraw{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+  .cell .en{font-family:sans-serif;font-size:11px;letter-spacing:3px;color:var(--grey);text-transform:uppercase;}
+  .cell h3{font-size:21px;font-weight:400;letter-spacing:3px;margin:4px 0 12px;}
+  .cell p{font-size:16px;color:#4a4a46;letter-spacing:1px;line-height:1.7;}
   .works{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:12px;}
   @media(max-width:640px){.works{grid-template-columns:1fr;}}
-  .work{
-    border:1px solid var(--line);padding:36px 32px;text-decoration:none;color:var(--ink);
-    display:block;transition:transform .35s,border-color .35s;position:relative;overflow:hidden;
-  }
+  .work{border:1px solid var(--line);padding:38px 32px;text-decoration:none;color:var(--ink);display:block;transition:transform .35s,border-color .35s;position:relative;overflow:hidden;}
   .work:hover{transform:translateY(-4px);border-color:var(--ink);}
   .work .tag{font-family:sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey);}
   .work h3{font-size:23px;font-weight:400;letter-spacing:1px;margin:14px 0 10px;}
   .work p{font-family:sans-serif;font-size:14px;color:#57574f;line-height:1.7;}
   .work .status{display:inline-block;margin-top:20px;font-family:sans-serif;font-size:12px;letter-spacing:2px;color:var(--red);}
   .work .corner{position:absolute;top:18px;right:20px;width:7px;height:7px;border-radius:50%;}
-  footer{border-top:1px solid var(--line);padding:60px 0 80px;text-align:center;}
+  footer{border-top:1px solid var(--line);padding:60px 0 80px;text-align:center;position:relative;z-index:2;}
   footer .dot{width:7px;height:7px;background:var(--red);border-radius:50%;margin:0 auto 24px;}
   footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-family:sans-serif;font-size:14px;letter-spacing:1px;padding-bottom:2px;transition:border-color .3s;}
   footer a:hover{border-color:var(--ink);}
   footer p{font-family:sans-serif;font-size:12px;color:var(--grey);letter-spacing:2px;margin-top:24px;}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s;}
   .reveal.show{opacity:1;transform:none;}
+  @media(max-width:640px){body{cursor:auto;}.cursor{display:none;}.num{font-size:70px;right:20px;}.vtag{display:none;}}
 </style>
 </head>
 <body>
+<div class="bg-art">
+<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-50 700 C 300 500, 500 780, 820 560 S 1300 420, 1500 640" fill="none" stroke="#1a1a1a" stroke-width="1" opacity="0.10"/>
+  <path d="M-50 760 C 350 620, 620 840, 900 660 S 1250 560, 1500 720" fill="none" stroke="#1a1a1a" stroke-width="1" opacity="0.07"/>
+  <path d="M200 120 C 400 240, 700 60, 1000 200" fill="none" stroke="#1a1a1a" stroke-width="1" opacity="0.06"/>
+  <circle cx="820" cy="560" r="4" fill="#c0392b" opacity="0.5"/>
+  <circle cx="1000" cy="200" r="3.5" fill="#e0a92e" opacity="0.5"/>
+  <circle cx="300" cy="500" r="3.5" fill="#2e7d5b" opacity="0.45"/>
+</svg>
+</div>
+<div class="ink-line">
+<svg viewBox="0 0 1040 3000" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg">
+  <path id="inkPath" class="ink-path" d="M520 40 C 520 260, 300 360, 300 560 S 740 760, 740 1000 S 300 1240, 300 1500 S 740 1760, 740 2040 S 400 2300, 520 2600"/>
+</svg>
+</div>
+<div class="cursor" id="cursor"></div>
 <nav id="nav">
   <div class="logo">e<b>·</b>v e</div>
   <div class="links">
@@ -113,6 +108,8 @@
   <div class="scroll-hint">SCROLL</div>
 </header>
 <section class="block" id="about">
+  <div class="num">01</div>
+  <div class="vtag">About</div>
   <div class="wrap reveal">
     <div class="kicker">About</div>
     <h2>关于 eve</h2>
@@ -124,46 +121,54 @@
   </div>
 </section>
 <section class="block" id="interests">
+  <div class="num">02</div>
+  <div class="vtag">Interests</div>
   <div class="wrap reveal">
     <div class="kicker">Interests</div>
     <h2>让我成为我的四件事</h2>
     <div class="grid">
       <div class="cell">
-        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
           <path d="M6 30 C14 10, 26 10, 34 30" stroke-linecap="round"/>
           <circle cx="31" cy="14" r="2.4" fill="#c0392b" stroke="none"/>
         </svg>
+        <div class="en">Painting</div>
         <h3>画画</h3>
-        <span>Painting — 尤爱吴冠中，痴迷线条与留白</span>
+        <p>世界给我一根线，我还它满纸留白</p>
       </div>
       <div class="cell">
-        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
-          <circle cx="14" cy="14" r="7"/><line x1="19" y1="19" x2="32" y2="32" stroke-linecap="round"/>
-          <circle cx="14" cy="14" r="2" fill="#e0a92e" stroke="none"/>
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M14 34 L20 6 L26 22 L32 12" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="6" r="2.4" fill="#e0a92e" stroke="none"/>
         </svg>
-        <h3>羽毛球</h3>
-        <span>Badminton — 场上讲节奏，场下也讲节奏</span>
+        <div class="en">Climbing</div>
+        <h3>攀岩</h3>
+        <p>恐惧之上，总还有下一个支点</p>
       </div>
       <div class="cell">
-        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
           <path d="M8 10 H32 V30 H8 Z"/><line x1="20" y1="10" x2="20" y2="30"/>
           <circle cx="14" cy="20" r="1.8" fill="#2e7d5b" stroke="none"/>
         </svg>
+        <div class="en">Reading</div>
         <h3>看书</h3>
-        <span>Reading — 在别人的思想里，长出自己的</span>
+        <p>在别人的思想里，长出自己的</p>
       </div>
       <div class="cell">
-        <svg class="ic" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
-          <rect x="7" y="12" width="26" height="16"/><path d="M7 12 L20 20 L33 12"/>
-          <circle cx="20" cy="20" r="1.8" fill="#2c5f8a" stroke="none"/>
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M10 30 L26 8 L32 14 L16 34 L8 34 Z" stroke-linejoin="round"/>
+          <circle cx="29" cy="11" r="1.8" fill="#2c5f8a" stroke="none"/>
         </svg>
-        <h3>看电影</h3>
-        <span>Film — 每一帧都是别人替我活过的人生</span>
+        <div class="en">Journaling</div>
+        <h3>写日记复盘</h3>
+        <p>每晚与昨天的自己对坐一次</p>
       </div>
     </div>
   </div>
 </section>
 <section class="block" id="works">
+  <div class="num">03</div>
+  <div class="vtag">Works</div>
   <div class="wrap reveal">
     <div class="kicker">Works</div>
     <h2>作品 · Vibe Coding</h2>
@@ -196,6 +201,21 @@
   addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>40)});
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.15});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const path=document.getElementById('inkPath');
+  if(path){
+    const len=path.getTotalLength();
+    path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+    const draw=()=>{const max=document.body.scrollHeight-innerHeight;const p=max>0?Math.min(scrollY/max,1):0;path.style.strokeDashoffset=len*(1-p);};
+    addEventListener('scroll',draw);draw();
+  }
+  const cur=document.getElementById('cursor');
+  let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function loop(){cx+=(mx-cx)*.18;cy+=(my-cy)*.18;cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,.work,.cell').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
 </script>
 </body>
 </html>
