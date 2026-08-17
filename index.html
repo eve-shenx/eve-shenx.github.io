@@ -99,5 +99,129 @@
   <div class="logo">e<b>·</b>v e</div>
   <div class="links">
     <a href="#about">关于</a>
-    <a href="
-...(truncated)...
+    <a href="#interests">爱好</a>
+    <a href="#works">作品</a>
+    <a href="#contact">联系</a>
+  </div>
+</nav>
+<header class="hero">
+  <div class="dot"></div>
+  <h1>eve</h1>
+  <div class="stroke"></div>
+  <div class="sub">think · create · renew</div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+<section class="block" id="about">
+  <div class="num">01</div>
+  <div class="vtag">About</div>
+  <div class="wrap reveal">
+    <div class="kicker">About</div>
+    <h2>关于 eve</h2>
+    <p class="lead">27 届在读，大三。一个相信「审美是判断力、思考是竞争力」的人。习惯把好奇心变成作品，把批判变成更好的答案。</p>
+    <blockquote class="quote">
+      苟日新，日日新，又日新。
+      <small>—— 保持批判，保持创新，保持每天都比昨天更清醒一点。</small>
+    </blockquote>
+  </div>
+</section>
+<section class="block" id="interests">
+  <div class="num">02</div>
+  <div class="vtag">Interests</div>
+  <div class="wrap reveal">
+    <div class="kicker">Interests</div>
+    <h2>让我成为我的四件事</h2>
+    <div class="grid">
+      <div class="cell">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M6 30 C14 10, 26 10, 34 30" stroke-linecap="round"/>
+          <circle cx="31" cy="14" r="2.4" fill="#c0392b" stroke="none"/>
+        </svg>
+        <div class="en">Painting</div>
+        <h3>画画</h3>
+        <p>世界给我一根线，我还它满纸留白</p>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M14 34 L20 6 L26 22 L32 12" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="6" r="2.4" fill="#e0a92e" stroke="none"/>
+        </svg>
+        <div class="en">Climbing</div>
+        <h3>攀岩</h3>
+        <p>恐惧之上，总还有下一个支点</p>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M8 10 H32 V30 H8 Z"/><line x1="20" y1="10" x2="20" y2="30"/>
+          <circle cx="14" cy="20" r="1.8" fill="#2e7d5b" stroke="none"/>
+        </svg>
+        <div class="en">Reading</div>
+        <h3>看书</h3>
+        <p>在别人的思想里，长出自己的</p>
+      </div>
+      <div class="cell">
+        <svg class="ic" width="42" height="42" viewBox="0 0 40 40" fill="none" stroke="#1a1a1a" stroke-width="1.2">
+          <path d="M10 30 L26 8 L32 14 L16 34 L8 34 Z" stroke-linejoin="round"/>
+          <circle cx="29" cy="11" r="1.8" fill="#2c5f8a" stroke="none"/>
+        </svg>
+        <div class="en">Journaling</div>
+        <h3>写日记复盘</h3>
+        <p>每晚与昨天的自己对坐一次</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="block" id="works">
+  <div class="num">03</div>
+  <div class="vtag">Works</div>
+  <div class="wrap reveal">
+    <div class="kicker">Works</div>
+    <h2>作品 · Vibe Coding</h2>
+    <p class="lead">不止会想，还能把想法变成能用的东西。以下两件，是我对「思考」这件事的产品化尝试。</p>
+    <div class="works">
+      <a class="work" href="dashboard.html">
+        <span class="corner" style="background:var(--red)"></span>
+        <div class="tag">TOOL / 01</div>
+        <h3>招聘作战看板</h3>
+        <p>将招聘全流程产品化：渠道漏斗、精力分配、候选人保温 / 催办智能提醒，内置 AI 每日复盘。</p>
+        <span class="status">进入体验 →</span>
+      </a>
+      <a class="work" href="#">
+        <span class="corner" style="background:var(--blue)"></span>
+        <div class="tag">TOOL / 02</div>
+        <h3>论点拆解器</h3>
+        <p>输入一个观点，帮你拆出论据、隐藏假设、逻辑漏洞与反方视角，并一键生成 AI 深度分析提示词。</p>
+        <span class="status">即将上线 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+<footer id="contact">
+  <div class="dot"></div>
+  <a href="https://github.com/eve-shenx" target="_blank">github.com/eve-shenx</a>
+  <p>© 2026 EVE · MADE WITH CURIOSITY</p>
+</footer>
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>40)});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const railFill=document.getElementById('railFill');
+  const nodes=document.querySelectorAll('.rail .node');
+  const draw=()=>{
+    const max=document.body.scrollHeight-innerHeight;
+    const p=max>0?Math.min(scrollY/max,1):0;
+    railFill.style.height=(p*100)+'%';
+    nodes.forEach((n,i)=>{const th=[0,.33,.66,1][i];n.classList.toggle('on',p>=th-0.02);});
+  };
+  addEventListener('scroll',draw);draw();
+  const cur=document.getElementById('cursor');
+  let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function loop(){cx+=(mx-cx)*.18;cy+=(my-cy)*.18;cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;requestAnimationFrame(loop)})();
+  document.querySelectorAll('a,.work,.cell').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+</script>
+</body>
+</html>
