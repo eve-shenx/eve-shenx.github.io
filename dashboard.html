@@ -22,7 +22,7 @@
   .qlink{font-family:sans-serif;font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:6px 15px;color:var(--ink);background:#fff;transition:all .25s;display:flex;align-items:center;gap:7px;}
   .qlink:hover{border-color:var(--ink);background:var(--soft);}
   .qlink i{width:7px;height:7px;border-radius:50%;}
-  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px;}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px;}
   @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);}}
   .kpi{border:1px solid var(--line);border-radius:4px;padding:18px 16px;background:#fff;position:relative;overflow:hidden;}
   .kpi .k{font-family:sans-serif;font-size:12px;color:var(--grey);letter-spacing:1px;}
@@ -75,27 +75,38 @@
   .a-warm{background:rgba(192,57,43,.1);color:var(--red);}
   .a-push{background:rgba(224,169,46,.15);color:#9a6f10;}
   .a-pend{background:rgba(44,95,138,.1);color:var(--blue);}
-  .a-ok{color:var(--grey);}
-  .pbar{height:4px;background:var(--soft);border-radius:2px;overflow:hidden;margin-top:5px;width:110px;}
-  .pbar i{display:block;height:100%;background:var(--blue);}
-  .pbar.warn i{background:var(--red);}
+  .a-ok{background:var(--soft);color:var(--grey);}
   .lnk{font-family:sans-serif;font-size:12px;color:var(--blue);cursor:pointer;margin-right:8px;text-decoration:none;}
   .lnk:hover{text-decoration:underline;}
   .lnk.del{color:var(--grey);}
-  .rem{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--line);border-radius:4px;margin-bottom:9px;font-family:sans-serif;font-size:13px;}
-  .rem .rd{width:8px;height:8px;border-radius:50%;flex:none;}
-  .rem .rt{flex:1;}
-  .rem .rk{font-size:11px;color:var(--grey);}
-  .todo{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-family:sans-serif;font-size:14px;}
-  .todo input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);flex:none;cursor:pointer;}
+  .pcard{border:1px solid var(--line);border-radius:5px;padding:16px 18px 10px;margin-bottom:14px;}
+  .pcard.urgent{border-color:var(--red);}
+  .phdr{display:flex;align-items:center;gap:10px;font-family:sans-serif;margin-bottom:6px;flex-wrap:wrap;}
+  .phdr .nm{font-family:"Songti SC",serif;font-size:18px;letter-spacing:1px;}
+  .phdr .ptag{font-size:11px;color:var(--grey);background:var(--soft);padding:2px 8px;border-radius:10px;}
+  .phdr .act{margin-left:auto;font-size:12px;}
+  .pipe{display:flex;overflow-x:auto;padding:6px 0 4px;}
+  .pnode{flex:1 0 82px;position:relative;text-align:center;}
+  .pnode .lbl{font-family:sans-serif;font-size:11px;color:var(--grey);height:32px;line-height:1.3;margin-bottom:6px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;}
+  .pnode.cur .lbl{color:var(--ink);font-weight:700;}
+  .pnode .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);background:#fff;margin:0 auto;position:relative;z-index:2;transition:all .3s;}
+  .pnode::before{content:"";position:absolute;top:47px;left:-50%;width:100%;height:2px;background:var(--line);z-index:1;}
+  .pnode:first-child::before{display:none;}
+  .pnode.done .dot,.pnode.cur .dot{background:var(--c);border-color:var(--c);}
+  .pnode.done::before{background:var(--c);}
+  .pnode.cur .dot{box-shadow:0 0 0 5px rgba(26,26,26,.07);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 5px rgba(26,26,26,.07)}50%{box-shadow:0 0 0 8px rgba(26,26,26,.03)}}
+  .pnode .prog{font-family:sans-serif;font-size:11px;margin-top:9px;min-height:15px;color:var(--ink);font-weight:700;}
+  .todo{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-family:sans-serif;font-size:15px;}
+  .todo input[type=checkbox]{width:17px;height:17px;accent-color:var(--red);flex:none;cursor:pointer;}
   .todo .cat{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--soft);color:var(--grey);flex:none;}
   .todo .tx{flex:1;}
   .todo.done .tx{text-decoration:line-through;color:var(--grey);}
   .todo .due{font-size:11px;color:var(--grey);flex:none;}
   .todo .due.over{color:var(--red);}
   .addrow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-  .addrow input,.addrow select{font-family:sans-serif;font-size:13px;border:1px solid var(--line);border-radius:3px;padding:7px 9px;background:#fff;}
-  .addrow input.grow{flex:1;min-width:140px;}
+  .addrow input,.addrow select{font-family:sans-serif;font-size:13px;border:1px solid var(--line);border-radius:3px;padding:8px 10px;background:#fff;}
+  .addrow input.grow{flex:1;min-width:160px;}
   .posgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   @media(max-width:820px){.posgrid{grid-template-columns:1fr;}}
   .pos{border:1px solid var(--line);border-radius:4px;padding:16px;position:relative;}
@@ -134,12 +145,26 @@
     <a class="qlink" href="https://h.liepin.com/" target="_blank"><i style="background:#ff7a00"></i>猎聘</a>
     <a class="qlink" href="https://maimai.cn/" target="_blank"><i style="background:#2c5f8a"></i>脉脉</a>
   </div>
-  <div class="kpis" id="kpis"></div>
   <div class="panel">
-    <div class="phead"><h2>AI 每日复盘</h2>
-      <div class="tools"><button class="btn mini" onclick="localRecap()">生成今日复盘</button> <button class="btn mini solid" onclick="copyAIPrompt()">复制 AI 深度复盘提示词</button></div>
+    <div class="phead"><h2>待办清单</h2><span class="tools">先清 todo，再看今天要推进谁</span></div>
+    <div id="todos"></div>
+    <div class="addrow">
+      <select id="tcat"><option>实习生</option><option>正职</option><option>画像沟通</option><option>杂事</option></select>
+      <input class="grow" id="ttext" placeholder="添加待办…（回车）">
+      <input type="date" id="tdue">
     </div>
-    <div class="ai-out" id="airecap">点「生成今日复盘」查看本地数据复盘；点「复制 AI 深度复盘提示词」把今日全部数据打包成提示词，粘到 Kimi / 豆包 获取卡点分析与明日改进建议。</div>
+  </div>
+  <div class="panel">
+    <div class="phead"><h2>智能提醒 · 候选人进度</h2><span class="tools" id="remCount"></span></div>
+    <div id="pipeline"></div>
+  </div>
+  <div class="panel">
+    <div class="phead"><h2>候选人流水</h2><button class="btn mini red" onclick="openCand()">＋ 添加候选人</button></div>
+    <div style="overflow-x:auto;"><table id="cand"></table></div>
+  </div>
+  <div class="panel">
+    <div class="phead"><h2>职位 / 方向管理</h2><button class="btn mini" onclick="openPos()">＋ 添加职位</button></div>
+    <div class="posgrid" id="posgrid"></div>
   </div>
   <div class="panel">
     <div class="phead"><h2>招聘漏斗</h2>
@@ -153,6 +178,7 @@
     </div>
     <div class="funnel" id="funnel"></div>
   </div>
+  <div class="kpis" id="kpis"></div>
   <div class="cols">
     <div class="panel">
       <div class="phead"><h2>每日工作量</h2><button class="btn mini" onclick="logToday()">＋ 记录今日</button></div>
@@ -172,27 +198,10 @@
     </div>
   </div>
   <div class="panel">
-    <div class="phead"><h2>职位 / 方向管理</h2><button class="btn mini" onclick="openPos()">＋ 添加职位</button></div>
-    <div class="posgrid" id="posgrid"></div>
-  </div>
-  <div class="panel">
-    <div class="phead"><h2>候选人流水</h2><button class="btn mini red" onclick="openCand()">＋ 添加候选人</button></div>
-    <div style="overflow-x:auto;"><table id="cand"></table></div>
-  </div>
-  <div class="cols">
-    <div class="panel">
-      <div class="phead"><h2>智能提醒</h2><span class="tools" id="remCount"></span></div>
-      <div id="rems"></div>
+    <div class="phead"><h2>AI 每日复盘</h2>
+      <div class="tools"><button class="btn mini" onclick="localRecap()">生成今日复盘</button> <button class="btn mini solid" onclick="copyAIPrompt()">复制 AI 深度复盘提示词</button></div>
     </div>
-    <div class="panel">
-      <div class="phead"><h2>待办清单</h2></div>
-      <div id="todos"></div>
-      <div class="addrow">
-        <select id="tcat"><option>实习生</option><option>正职</option><option>画像沟通</option><option>杂事</option></select>
-        <input class="grow" id="ttext" placeholder="添加待办…（回车）">
-        <input type="date" id="tdue">
-      </div>
-    </div>
+    <div class="ai-out" id="airecap">忙完一天，点「生成今日复盘」看本地数据复盘；点「复制 AI 深度复盘提示词」把今日数据打包，粘到 Kimi / 豆包 获取卡点分析与明日改进建议。</div>
   </div>
   <div class="foot">© 2026 EVE · 招聘作战看板 · 数据仅存于本地浏览器，请勿填入真实候选人隐私</div>
 </div>
@@ -225,6 +234,7 @@
 <script>
 const CH_NAMES={boss:"BOSS直聘",liepin:"猎聘",maimai:"脉脉",refer:"内推",intern:"实习生"};
 const PEND_DAYS=7, WARM_DAYS=3, PUSH_DAYS=3;
+const NODE_COLORS=["#1a1a1a","#33443f","#2c5f8a","#7a5230","#2e7d5b","#b08114","#a03a2b","#5a4a8a","#c0392b"];
 const today=()=>new Date().toISOString().slice(0,10);
 const daysBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
 const esc=s=>(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
@@ -254,19 +264,19 @@ function seed(){
 function load(){try{const s=JSON.parse(localStorage.getItem('eve_dash2'));if(s&&s.channels&&s.positions)return s;}catch(e){}return seed();}
 function save(){localStorage.setItem('eve_dash2',JSON.stringify(S));}
 const posName=id=>{const p=S.positions.find(x=>x.id===id);return p?p.name:"—";};
+function stagesOf(c){const p=S.positions.find(x=>x.id===c.posId);const flow=p?p.flow:[];return ["Sourcing","简历筛选","已推用人部门",...flow,"已入职"].filter((v,i,a)=>a.indexOf(v)===i);}
 function candAlert(c){
   const gap=daysBetween(c.last,today());
-  if(c.status==="pending"){const left=PEND_DAYS-gap;return{type:"pend",push:left<=0?"已满7天·催业务反馈":`Pending ${gap}天，${left}天后催`,gap,warn:left<=0};}
+  if(c.status==="pending"){const left=PEND_DAYS-gap;return{type:"pend",push:left<=0?"已满7天·催业务反馈":`Pending ${gap}天·${left}天后催`,gap,warn:left<=0};}
   if(c.status==="push"){return{type:"push",push:gap>=PUSH_DAYS?"催用人部门筛选":`推送${gap}天·等待中`,gap,warn:gap>=PUSH_DAYS};}
   if(gap>=WARM_DAYS)return{type:"warm",push:`${gap}天未联系·该保温`,gap,warn:true};
-  return{type:"ok",push:`${gap}天前联系`,gap,warn:false};
+  return{type:"ok",push:`${gap}天前联系·正常推进`,gap,warn:false};
 }
 let funnelView="all";
 function renderKPI(){
   const t=S.daily[S.daily.length-1]||{sourcing:0,calls:0};
-  const active=S.candidates.length;
-  const offer=S.candidates.filter(c=>c.stage==="Offer"||c.stage==="Offer发放").length;
-  const data=[{k:"今日 Sourcing",v:t.sourcing},{k:"今日电话",v:t.calls},{k:"待处理提醒",v:buildReminders().length},{k:"进行中候选人",v:active},{k:"Offer 阶段",v:offer}];
+  const offer=S.candidates.filter(c=>c.stage==="Offer"||c.stage==="已入职").length;
+  const data=[{k:"今日 Sourcing",v:t.sourcing},{k:"今日电话",v:t.calls},{k:"待处理提醒",v:S.candidates.filter(c=>candAlert(c).warn).length},{k:"进行中候选人",v:S.candidates.length},{k:"Offer 阶段",v:offer}];
   document.getElementById('kpis').innerHTML=data.map(d=>`<div class="kpi"><div class="edge"></div><div class="k">${d.k}</div><div class="v">${d.v}</div></div>`).join('');
   document.getElementById('today').textContent="今天 "+today()+" · Recruiting Command Center";
 }
@@ -309,51 +319,55 @@ function renderCand(){
   let html=`<tr><th>姓名</th><th>职位</th><th>渠道</th><th>阶段</th><th>状态/提醒</th><th>操作</th></tr>`;
   S.candidates.forEach(c=>{
     const a=candAlert(c);const cls={warm:"a-warm",push:"a-push",pend:"a-pend",ok:"a-ok"}[a.type];
-    let al=`<span class="alert ${cls}">${a.push}</span>`;
-    if(a.type==="pend"){const pct=Math.min(100,a.gap/PEND_DAYS*100);al+=`<div class="pbar ${a.warn?'warn':''}"><i style="width:${pct}%"></i></div>`;}
     const resume=c.url?`<a class="lnk" href="${esc(c.url)}" target="_blank">看简历</a>`:'';
     html+=`<tr><td>${esc(c.name)}</td><td>${esc(posName(c.posId))}</td><td>${CH_NAMES[c.ch]||c.ch}</td>
-      <td><span class="stage-tag">${esc(c.stage)}</span></td><td>${al}</td>
+      <td><span class="stage-tag">${esc(c.stage)}</span></td><td><span class="alert ${cls}">${a.push}</span></td>
       <td>${resume}<span class="lnk" onclick="touchCand('${c.id}')">已联系</span><span class="lnk" onclick="editCand('${c.id}')">编辑</span><span class="lnk del" onclick="delCand('${c.id}')">删</span></td></tr>`;
   });
   document.getElementById('cand').innerHTML=html;
 }
-function buildReminders(){
-  const list=[];
-  S.candidates.forEach(c=>{const a=candAlert(c);if(a.warn)list.push({color:a.type==="warm"?"#c0392b":a.type==="push"?"#e0a92e":"#2c5f8a",kind:a.type==="warm"?"保温":a.type==="push"?"催业务":"催反馈",text:`${c.name}（${posName(c.posId)}·${c.stage}）${a.push}`});});
-  S.todos.forEach(t=>{if(!t.done&&t.due&&daysBetween(t.due,today())>=0)list.push({color:"#c0392b",kind:"逾期待办",text:t.text});});
-  return list;
-}
-function renderRems(){
-  const list=buildReminders();document.getElementById('remCount').textContent=list.length+" 条";
-  document.getElementById('rems').innerHTML=list.length?list.map(r=>`<div class="rem"><span class="rd" style="background:${r.color}"></span><span class="rt">${esc(r.text)}</span><span class="rk">${r.kind}</span></div>`).join(''):'<div style="font-family:sans-serif;color:var(--grey);font-size:13px;padding:8px 0">暂无待处理提醒 ✦</div>';
+function renderPipeline(){
+  const box=document.getElementById('pipeline');
+  const warnN=S.candidates.filter(c=>candAlert(c).warn).length;
+  document.getElementById('remCount').textContent=warnN?`${warnN} 人待处理`:"节奏正常 ✦";
+  const sorted=[...S.candidates].sort((a,b)=>(candAlert(b).warn?1:0)-(candAlert(a).warn?1:0));
+  box.innerHTML=sorted.map(c=>{
+    const a=candAlert(c);const stages=stagesOf(c);let cur=stages.indexOf(c.stage);if(cur<0)cur=0;
+    const cls={warm:"a-warm",push:"a-push",pend:"a-pend",ok:"a-ok"}[a.type];
+    const nodes=stages.map((s,i)=>{
+      const col=NODE_COLORS[i%NODE_COLORS.length];
+      const st=i<cur?"done":i===cur?"cur":"";
+      const prog=i===cur?`<div class="prog">${esc(a.push)}</div>`:`<div class="prog"></div>`;
+      return `<div class="pnode ${st}" style="--c:${col}"><div class="lbl">${esc(s)}</div><div class="dot"></div>${prog}</div>`;
+    }).join('');
+    return `<div class="pcard ${a.warn?'urgent':''}">
+      <div class="phdr"><span class="nm">${esc(c.name)}</span><span class="ptag">${esc(posName(c.posId))} · ${CH_NAMES[c.ch]||c.ch}</span>
+        <span class="act"><span class="alert ${cls}">${a.warn?'需处理':'进行中'}</span> <span class="lnk" onclick="touchCand('${c.id}')">已联系</span></span></div>
+      <div class="pipe">${nodes}</div></div>`;
+  }).join('')||'<div style="font-family:sans-serif;color:var(--grey);font-size:13px">暂无候选人，去下方「候选人流水」添加。</div>';
 }
 function renderTodos(){
   document.getElementById('todos').innerHTML=S.todos.map(t=>{const over=t.due&&!t.done&&daysBetween(t.due,today())>0;
     return `<div class="todo ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')"><span class="cat">${t.cat}</span><span class="tx">${esc(t.text)}</span><span class="due ${over?'over':''}">${t.due?t.due.slice(5):''}</span><span class="lnk del" onclick="delTodo('${t.id}')">×</span></div>`;
-  }).join('')||'<div style="font-family:sans-serif;color:var(--grey);font-size:13px">暂无待办</div>';
+  }).join('')||'<div style="font-family:sans-serif;color:var(--grey);font-size:13px">暂无待办，下方添加。</div>';
 }
-function renderAll(){renderKPI();renderFunnel();renderBars();renderDonut();renderPos();renderCand();renderRems();renderTodos();}
+function renderAll(){renderKPI();renderFunnel();renderBars();renderDonut();renderPos();renderCand();renderPipeline();renderTodos();}
 function analytics(){
   const n=S.daily.length,t=S.daily[n-1]||{},y=S.daily[n-2]||{};
   const avgS=Math.round(S.daily.reduce((a,b)=>a+b.sourcing,0)/n);
   const conv=Object.entries(S.channels).map(([k,c])=>({k,name:CH_NAMES[k],rate:c.sourcing?+(c.offer/c.sourcing*100).toFixed(1):0,srcRate:c.sourcing?+(c.screen/c.sourcing*100).toFixed(1):0}));
   const best=[...conv].sort((a,b)=>b.rate-a.rate)[0],worst=[...conv].sort((a,b)=>a.rate-b.rate)[0];
-  const rems=buildReminders();
   const warm=S.candidates.filter(c=>candAlert(c).type==="warm"&&candAlert(c).warn).length;
   const pend=S.candidates.filter(c=>candAlert(c).type==="pend"&&candAlert(c).warn).length;
   const push=S.candidates.filter(c=>candAlert(c).type==="push"&&candAlert(c).warn).length;
-  return {t,y,avgS,best,worst,rems,warm,pend,push,conv};
+  return {t,y,avgS,best,worst,warm,pend,push,conv,rems:warm+pend+push};
 }
 function localRecap(){
-  const a=analytics();
-  const trend=a.t.sourcing>=a.avgS?"高于":"低于";
-  let s="";
+  const a=analytics();const trend=a.t.sourcing>=a.avgS?"高于":"低于";let s="";
   s+=`【今日数据复盘】\n今日 Sourcing ${a.t.sourcing}（7日均值 ${a.avgS}，${trend}均值）｜电话 ${a.t.calls||0}｜杂事 ${a.t.other||0}\n\n`;
   s+=`【渠道效率】\n性价比最高：${a.best.name}（Offer 转化 ${a.best.rate}%）｜偏低：${a.worst.name}（${a.worst.rate}%）→ 建议 sourcing 向 ${a.best.name} 倾斜\n\n`;
-  s+=`【卡点提醒】\n待处理 ${a.rems.length} 条：需保温 ${a.warm} 人 / 需催业务反馈 ${a.pend} 人 / 需催用人部门筛选 ${a.push} 人\n\n`;
-  s+=`【明日建议】\n`;
-  const tips=[];
+  s+=`【卡点提醒】\n待处理 ${a.rems} 条：需保温 ${a.warm} 人 / 需催业务反馈 ${a.pend} 人 / 需催用人部门筛选 ${a.push} 人\n\n`;
+  s+=`【明日建议】\n`;const tips=[];
   if(a.t.sourcing<a.avgS)tips.push("今日 sourcing 低于均值，明日优先补量");
   if(a.warm)tips.push(`${a.warm} 位候选人超 3 天未联系，明日集中保温`);
   if(a.pend)tips.push(`${a.pend} 位 pending 已满 7 天，明日务必催业务反馈`);
@@ -388,11 +402,10 @@ function editCand(id){const c=S.candidates.find(x=>x.id===id);if(!c)return;editi
 function saveCand(){const o={name:c_name.value.trim(),posId:c_pos.value,ch:c_ch.value,stage:c_stage.value,status:c_status.value,last:c_last.value||today(),url:c_url.value.trim()};if(!o.name){alert("请填姓名");return;}if(editingId){Object.assign(S.candidates.find(x=>x.id===editingId),o);}else{o.id="c"+Date.now();S.candidates.push(o);}save();candDlg.close();renderAll();}
 function touchCand(id){const c=S.candidates.find(x=>x.id===id);if(c){c.last=today();save();renderAll();}}
 function delCand(id){if(confirm("删除该候选人？")){S.candidates=S.candidates.filter(x=>x.id!==id);save();renderAll();}}
-function toggleTodo(id){const t=S.todos.find(x=>x.id===id);if(t){t.done=!t.done;save();renderTodos();renderRems();renderKPI();}}
-function delTodo(id){S.todos=S.todos.filter(x=>x.id!==id);save();renderTodos();renderRems();}
-document.getElementById('ttext').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim()){S.todos.push({id:"t"+Date.now(),cat:tcat.value,text:e.target.value.trim(),due:tdue.value||"",done:false});e.target.value='';tdue.value='';save();renderTodos();renderRems();}});
+function toggleTodo(id){const t=S.todos.find(x=>x.id===id);if(t){t.done=!t.done;save();renderTodos();renderKPI();}}
+function delTodo(id){S.todos=S.todos.filter(x=>x.id!==id);save();renderTodos();}
+document.getElementById('ttext').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim()){S.todos.push({id:"t"+Date.now(),cat:tcat.value,text:e.target.value.trim(),due:tdue.value||"",done:false});e.target.value='';tdue.value='';save();renderTodos();}});
 renderAll();
 </script>
 </body>
 </html>
-```
