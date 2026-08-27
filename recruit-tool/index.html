@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>招聘筛选标准 · 可视化工具</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+背景:#fafafa;background:#fafafa;color:#222;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+header{text-align:center;margin-bottom:8px}
+h1{font-size:26px;font-weight:600;letter-spacing:-.3px}
+.sub{color:#888;font-size:14px;margin-top:6px}
+.quote{text-align:center;color:#bbb;font-size:12px;margin:14px 0 28px;font-style:italic}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px}
+.tabs button{padding:9px 22px;border:1px solid #e5e5e5;background:#fff;border-radius:20px;
+cursor:pointer;font-size:14px;color:#666;transition:.2s;font-family:inherit}
+.tabs button:hover{border-color:#ff2442;color:#ff2442}
+.tabs button.on{background:#ff2442;color:#fff;border-color:#ff2442}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px;
+box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.search{width:100%;padding:13px 16px;border:1px solid #e5e5e5;border-radius:10px;
+font-size:14px;margin-bottom:18px;font-family:inherit;outline:none;transition:.2s}
+.search:focus{border-color:#ff2442}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:22px}
+.stat{padding:14px;border-radius:10px;border-left:3px solid;background:#fcfcfc;cursor:pointer;transition:.2s}
+.stat:hover{background:#f5f5f5;transform:translateY(-1px)}
+.stat b{display:block;font-size:23px;font-weight:600}
+.stat span{font-size:12px;color:#777}
+.sec{border:1px solid #f0f0f0;border-radius:10px;margin-bottom:9px;overflow:hidden}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;
+cursor:pointer;background:#fcfcfc;transition:.2s}
+.sh:hover{background:#f5f5f5}
+.sh .t{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%}
+.n{font-size:12px;color:#999;background:#f0f0f0;padding:2px 9px;border-radius:9px;font-weight:400}
+.sb{padding:16px;border-top:1px solid #f5f5f5}
+.desc{font-size:12px;color:#999;margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:4px 11px;background:#fafafa;border:1px solid #eee;border-radius:13px;font-size:12px;color:#555}
+.tag.hit{background:#fff1f3;border-color:#ffccd5;color:#ff2442;font-weight:500}
+label{display:block;font-size:13px;color:#555;margin:14px 0 6px;font-weight:500}
+input[type=text],textarea{width:100%;padding:11px 14px;border:1px solid #e5e5e5;
+border-radius:9px;font-size:14px;font-family:inherit;outline:none;transition:.2s}
+input[type=text]:focus,textarea:focus{border-color:#ff2442}
+textarea{resize:vertical;min-height:70px}
+.hint{font-size:11px;color:#bbb;margin-top:4px}
+.btn{width:100%;padding:13px;background:#ff2442;color:#fff;border:none;border-radius:9px;
+font-size:15px;font-weight:500;cursor:pointer;margin-top:20px;font-family:inherit;transition:.2s}
+.btn:hover{background:#e01f3a}
+.res{margin-top:20px;padding:20px;border-radius:11px;display:none}
+.res.pass{background:#f0f9f4;border:1px solid #c6e9d5}
+.res.fail{background:#fef6f6;border:1px solid #f5d0d0}
+.res h3{font-size:18px;margin-bottom:12px}
+.res.pass h3{color:#0a8043}
+.res.fail h3{color:#c5221f}
+.res ul{list-style:none;font-size:13px}
+.res li{padding:5px 0;color:#444;display:flex;gap:7px}
+.res li b{color:#222;min-width:64px;flex-shrink:0}
+.err{padding:16px;background:#fffbe6;border:1px solid #ffe58f;border-radius:9px;
+font-size:13px;color:#8a6d0b;line-height:1.8}
+.err code{background:#fff;padding:1px 6px;border-radius:4px;font-size:12px}
+footer{text-align:center;color:#ccc;font-size:12px;margin-top:36px;line-height:1.9}
+@media(max-width:600px){.wrap{padding:20px 14px 40px}h1{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>招聘筛选标准</h1>
+    <div class="sub">把隐性判断变成可复用、可交接、可审查的规则</div>
+  </header>
+  <div class="quote">「审美是判断力，思考是竞争力」</div>
+
+  <div class="tabs">
+    <button id="t1" class="on" onclick="go(1)">📊 标准总览</button>
+    <button id="t2" onclick="go(2)">⚡ 简历自测</button>
+  </div>
+
+  <!-- 标准总览 -->
+  <div id="p1">
+    <div class="card">
+      <input class="search" id="q" placeholder="🔍 搜学校、公司、关键词…（如：武汉理工 / 字节 / PRD）" oninput="render()">
+      <div class="grid" id="stats"></div>
+      <div id="secs"></div>
+    </div>
+  </div>
+
+  <!-- 简历自测 -->
+  <div id="p2" style="display:none">
+    <div class="card">
+      <label>本科院校</label>
+      <input type="text" id="bs" placeholder="如：武汉理工大学">
+      <div class="hint">没有本科信息就填最高学历院校</div>
+
+      <label>最高学历院校（选填）</label>
+      <input type="text" id="ms" placeholder="如：复旦大学">
+
+      <label>实习公司（多段用逗号或换行分隔）</label>
+      <textarea id="co" placeholder="字节跳动&#10;某某科技有限公司"></textarea>
+
+      <label>职位名称</label>
+      <input type="text" id="ti" placeholder="如：产品经理实习生">
+
+      <label>工作描述（选填，但很关键）</label>
+      <textarea id="de" placeholder="撰写PRD、竞品分析、需求评审、埋点数据分析…"></textarea>
+      <div class="hint">描述里出现 PRD / 需求分析 / 用户调研 等词能直接命中产品档</div>
+
+      <button class="btn" onclick="check()">开始判定</button>
+      <div class="res" id="res"></div>
+    </div>
+  </div>
+
+  <footer>
+    数据来源：本人维护的招聘筛选口径<br>
+    仅含标准规则，不含任何候选人信息
+  </footer>
+</div>
+
+<script>
+var C=null, S=[
+ ['BIG','大厂列表','#ff2442','实习经历命中其中任一家 → 大厂档'],
+ ['T1_S','S 档 · 顶尖院校','#c0392b','清北复交浙南科人同'],
+ ['T2_A','A 档 · 985','#e67e22','其余 985 院校'],
+ ['T3_B','B 档 · 211','#3498db','211 及强双非'],
+ ['OVERSEA_B','海外名校','#9b59b6','港澳台及海外，按 B 档计'],
+ ['PD_TITLE','产品信号 · 职位名','#27ae60','职位名命中 → 产品档'],
+ ['PD_DESC','产品信号 · 工作描述','#2ecc71','描述命中 → 产品档'],
+ ['PD_TITLE_EXCLUDE','排除 · 设计岗','#95a5a6','防止 UI/UX 岗被误判为产品']
+];
+var open={};
+
+fetch('./criteria.json').then(function(r){
+  if(!r.ok) throw 0; return r.json();
+}).then(function(d){ C=d; render(); }).catch(function(){
+  document.getElementById('secs').innerHTML='<div class="err">'+
+  '<b>没读到 criteria.json</b><br>'+
+  '请在本页同一个文件夹里上传 <code>criteria.json</code>。<br>'+
+  '获取方式：打开你的 Cowork 邀约看板 → <code>⚙️ 筛选标准</code> → <code>📥 导出 JSON</code>'+
+  '</div>';
+});
+
+function go(n){
+  document.getElementById('p1').style.display = n==1?'':'none';
+  document.getElementById('p2').style.display = n==2?'':'none';
+  document.getElementById('t1').className = n==1?'on':'';
+  document.getElementById('t2').className = n==2?'on':'';
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function render(){
+  if(!C) return;
+  var q=document.getElementById('q').value.trim().toLowerCase();
+  var st='',sc='';
+  S.forEach(function(s){
+    var k=s[0],name=s[1],col=s[2],desc=s[3];
+    var all=C[k]||[];
+    var list=q?all.filter(function(x){return x.toLowerCase().indexOf(q)>-1}):all;
+    st+='<div class="stat" style="border-left-color:'+col+'" onclick="tog(\''+k+'\')">'+
+        '<b style="color:'+col+'">'+all.length+'</b><span>'+name+'</span></div>';
+    var isOpen = open[k] || (q && list.length);
+    sc+='<div class="sec"><div class="sh" onclick="tog(\''+k+'\')">'+
+        '<div class="t"><span class="dot" style="background:'+col+'"></span>'+name+
+        '<span class="n">'+(q?list.length+' / ':'')+all.length+'</span></div>'+
+        '<span style="color:#ccc;font-size:11px">'+(isOpen?'▲':'▼')+'</span></div>';
+    if(isOpen){
+      sc+='<div class="sb"><div class="desc">'+desc+'</div><div class="tags">';
+      if(list.length){
+        list.forEach(function(x){
+          sc+='<span class="tag'+(q?' hit':'')+'">'+esc(x)+'</span>';
+        });
+      } else sc+='<span style="color:#ccc;font-size:13px">无匹配</span>';
+      sc+='</div></div>';
+    }
+    sc+='</div>';
+  });
+  document.getElementById('stats').innerHTML=st;
+  document.getElementById('secs').innerHTML=sc;
+}
+
+function tog(k){ open[k]=!open[k]; render(); }
+
+function tier(school){
+  if(!school) return 'X';
+  var s=school.trim();
+  if(!s) return 'X';
+  function hit(arr){ return (arr||[]).some(function(x){ return s.indexOf(x)>-1; }); }
+  if(hit(C.T1_S)) return 'S';
+  if(hit(C.T2_A)) return 'A';
+  if(hit(C.T3_B)) return 'B';
+  if(hit(C.OVERSEA_B)) return 'B';
+  return 'X';
+}
+
+function check(){
+  if(!C){ alert('标准数据还没加载，请先上传 criteria.json'); return; }
+  var bs=document.getElementById('bs').value.trim();
+  var ms=document.getElementById('ms').value.trim();
+  var co=document.getElementById('co').value;
+  var ti=document.getElementById('ti').value.trim().toLowerCase();
+  var de=document.getElementById('de').value;
+
+  var bt=tier(bs), mt=tier(ms);
+  var useT = bs ? bt : mt;
+  var okSchool = useT !== 'X';
+
+  var cos=co.split(/[,，\n]/).map(function(x){return x.trim()}).filter(Boolean);
+  var bigHit=[];
+  cos.forEach(function(c){
+    (C.BIG||[]).forEach(function(b){
+      if(c.toLowerCase().indexOf(b.toLowerCase())>-1 && bigHit.indexOf(b)<0) bigHit.push(b);
+    });
+  });
+
+  var tHit=(C.PD_TITLE||[]).filter(function(k){return ti.indexOf(k.toLowerCase())>-1});
+  var xHit=(C.PD_TITLE_EXCLUDE||[]).filter(function(k){return ti.indexOf(k.toLowerCase())>-1});
+  var dHit=(C.PD_DESC||[]).filter(function(k){return de.indexOf(k)>-1});
+  var prod=(tHit.length&&!xHit.length)||dHit.length>0;
+
+  var pass = okSchool && (bigHit.length>0 || prod);
+
+  var h='<h3>'+(pass?'✅ 通过初筛':'❌ 未通过')+'</h3><ul>';
+  h+='<li><b>学校档位</b><span>'+
+     (bs?esc(bs)+' → '+bt+' 档':'（未填本科）')+
+     (ms?'；'+esc(ms)+' → '+mt+' 档':'')+
+     ' <span style="color:'+(okSchool?'#0a8043':'#c5221f')+'">'+
+     (okSchool?'✓ 达标':'✗ 不在 S/A/B 档')+'</span></span></li>';
+  h+='<li><b>大厂经历</b><span>'+(bigHit.length?
+     '<span style="color:#0a8043">✓ 命中 '+bigHit.map(esc).join('、')+'</span>':
+     '<span style="color:#999">未命中</span>')+'</span></li>';
+  h+='<li><b>产品信号</b><span>';
+  if(tHit.length&&!xHit.length) h+='<span style="color:#0a8043">✓ 职位名命中「'+tHit.map(esc).join('、')+'」</span>';
+  else if(dHit.length) h+='<span style="color:#0a8043">✓ 描述命中「'+dHit.slice(0,5).map(esc).join('、')+'」</span>';
+  else if(xHit.length) h+='<span style="color:#c5221f">✗ 命中排除词「'+xHit.map(esc).join('、')+'」（设计岗）</span>';
+  else h+='<span style="color:#999">未命中</span>';
+  h+='</span></li>';
+  h+='<li><b>判定路径</b><span>'+(pass?
+     (bigHit.length?'学校达标 + 大厂档':'学校达标 + 产品档'):
+     (!okSchool?'学校不在档内，直接淘汰':'学校达标，但大厂与产品信号均未命中'))+'</span></li>';
+  h+='</ul>';
+
+  var r=document.getElementById('res');
+  r.className='res '+(pass?'pass':'fail');
+  r.innerHTML=h;
+  r.style.display='block';
+}
+</script>
+</body>
+</html>
